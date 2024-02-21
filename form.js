@@ -1,34 +1,21 @@
 const express = require('express');
-const fileupload = require('express-fileupload');
-const fs = require('fs');
-
+var bodyparser=require('body-parser');
 const app = express();
-
-app.use(fileupload());
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/indexb.html');
+app.get('/',function(req, res)
+{
+res.render('form');
 });
-
-
-
-app.post('/uploads', (req, res) => {
-    if (req.files)
-        console.log(req.files);
-    var file = req.files.myfile;
-    var filename = file.name;
-    console.log(filename);
-    file.mv(__dirname + '/uploads/' + filename, function (err) {
-        if (err) {
-            res.send(err)
-        }
-        else {
-            res.send("FILE: " + file.name + " uploaded");
-        }
-    });
-
+//create view
+app.set('view engine', 'pug');
+app.set('views','./views')
+//parsing
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: true}));
+app.post('/', function(req, res)
+{
+console.log(req.body);
+res.send("Received request");
 })
-
 const port = 8000;
 
 app.listen(port, () => {
